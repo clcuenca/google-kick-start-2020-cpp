@@ -20,7 +20,6 @@ int main(int arc, char* argv[]) {
     int plates      ;
     int use         ;
     int buffer      ;
-    int totalBeauty ;
     
     /// -------
     /// Program
@@ -31,49 +30,42 @@ int main(int arc, char* argv[]) {
     
     while(inputCount--) {
         
-        totalBeauty = 0;
-        
         std::cin >> stackNumber ; // N
         std::cin >> plates      ; // K
         std::cin >> use         ; // P
         
-        std::vector<std::vector<int>> stacks(stackNumber);
+        std::vector<std::vector<int>> stacks(stackNumber, std::vector<int>(plates, 0));
+        std::vector<std::vector<int>> dp(stackNumber + 1, std::vector<int>(use + 1, 0));
 
         // Input
         for(int index = 0; index < stackNumber; index++)
-            for(int jindex = 0; jindex < plates; jindex++) {
-                
-                std::cin >> buffer;
-
-                stacks[index].push_back(buffer);
-
-            }
+            for(int jindex = 0; jindex < plates; jindex++)
+                std::cin >> stacks [index][jindex];
 
         // Process
-        for(int index = 0; index < stackNumber; index++) {
-            
-            int sum = 0;
-            
-            for(int jindex = 0; jindex < plates; jindex++) {
+        for(int stack = 0; stack < stackNumber; stack++) 
+            for(int plate = 0; plate <= use; plate++) {
+
+                int sum = 0;
                 
-                sum += stacks[index][jindex];
-                
-                for(int kindex = 0; kindex + jindex + 1 <= use; kindex++) {
-                    
-                    stacks[index + 1][kindex + jindex + 1] =
-                        std::max(stacks[index][kindex] + sum, stacks[index + 1][kindex + jindex + 1]);
-                    
+                for(int kindex = 0; kindex <= plates; kindex++) {
+
+                    if(plate + kindex > use) break;
+
+                    dp[stack + 1][plate + kindex] =
+                        std::max(dp[stack + 1][plate + kindex], sum + dp[stack][plate]);
+
+                    if(kindex != plates) sum += stacks[stack][kindex];
+
                 }
-                
+
             }
-            
-        }
 
         // Output
-        std::cout << "Case #" << inputNumber << ": " << stacks[stackNumber][use] << std::endl;
+        std::cout << "Case #" << inputNumber << ": " << dp[stackNumber][use] << std::endl;
         
         inputNumber++;
-        
+
     }
     
     return 0;
