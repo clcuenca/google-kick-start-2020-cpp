@@ -19,7 +19,6 @@ int main(int arc, char* argv[]) {
     int stackNumber ;
     int plates      ;
     int use         ;
-    int buffer      ;
     
     /// -------
     /// Program
@@ -33,6 +32,10 @@ int main(int arc, char* argv[]) {
         std::cin >> stackNumber ; // N
         std::cin >> plates      ; // K
         std::cin >> use         ; // P
+
+        std::cout << "Stack Number: " << stackNumber << std::endl;
+        std::cout << "Plates: " << plates << std::endl;
+        std::cout << "Use: " << use << std::endl;
         
         std::vector<std::vector<int>> stacks(stackNumber, std::vector<int>(plates, 0));
         std::vector<std::vector<int>> dp(stackNumber + 1, std::vector<int>(use + 1, 0));
@@ -47,8 +50,12 @@ int main(int arc, char* argv[]) {
             for(int plate = 0; plate <= use; plate++) {
 
                 int sum = 0;
+
+                std::cout << "Kindex: ";
                 
                 for(int kindex = 0; kindex <= plates; kindex++) {
+
+                    std::cout << kindex << " ";
 
                     if(plate + kindex > use) break;
 
@@ -59,7 +66,34 @@ int main(int arc, char* argv[]) {
 
                 }
 
+                std::cout << std::endl;
+
             }
+
+        for(int index = 0; index < stackNumber; index++) {
+            for(int jindex = 0; jindex < plates; jindex++) {
+
+                std::cout << stacks[index][jindex] << " ";
+
+            }
+
+            std::cout << std::endl;
+
+        }
+
+        std::cout << std::endl;
+
+        for(int index = 0; index <= stackNumber; index++) {
+
+            for(int jindex = 0; jindex <= use; jindex++) {
+
+                std::cout << dp[index][jindex] << " ";
+
+            }
+
+            std::cout << std::endl;
+
+        }
 
         // Output
         std::cout << "Case #" << inputNumber << ": " << dp[stackNumber][use] << std::endl;
