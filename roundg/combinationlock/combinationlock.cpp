@@ -42,37 +42,47 @@ int main(int argc, char* argv[]) {
         
         std::cin >> wheelCount >> maxValue;
 
-        std::vector<int> wheels(wheelCount, 1);
+        std::vector<int> wheels(wheelCount);
         
-        for(int index = 0; index < wheels.size(); index++)
+        for(int index = 0; index < wheels.size(); index++) {
+        
             std::cin >> wheels[index];
 
-        for(int value = 1; value <= maxValue; value++) {
+            wheels[index]--;
+        
+        }
 
-            moves = INT_MAX;
+        moves = INT_MAX;
+        
+        // Select a wheel
+        for(int index = 0; index < wheels.size(); index++) {
+
             int currentMoves = 0;
 
-            for(int wheel = 0; wheel < wheels.size(); wheel++) {
+            // Loop through the other wheels
+            for(int jindex = 0; jindex < wheels.size(); jindex++) {
 
+                // As long as we don't get to the current wheel
                 int movesPositive;
 
-                if(wheels[wheel] <= value) movesPositive = value - wheels[wheel];
-                else movesPositive = maxValue - wheels[wheel] + value;
+                if(wheels[jindex] <= wheels[index]) movesPositive = wheels[index] - wheels[jindex];
+                else movesPositive = maxValue - wheels[jindex] + wheels[index];
 
                 int movesNegative;
 
-                if(wheels[wheel] >= value) movesNegative = wheels[wheel] - value;
-                else movesNegative = wheels[wheel] + (maxValue - value);
+                if(wheels[jindex] >= wheels[index]) movesNegative = wheels[jindex] - wheels[index];
+                else movesNegative = wheels[jindex] + (maxValue - value);
 
                 currentMoves += std::min(movesPositive, movesNegative);
 
             }
 
-            moves = std::min(currentMoves, moves);
+            moves = std::min(currentMoves, moves)
 
         }
 
-        std::cout << "Case #" << caseNumber << ": " << moves << std::endl; 
+
+        std::cout << "Case #" << caseNumber << ": " << moves + 1 << std::endl; 
     
     }
     
